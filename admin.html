@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoPrime — Dashboard Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b0:#0d0d0d;--b1:#141414;--b2:#1c1c1c;--b3:#252525;--b4:#2e2e2e;--or:#f97316;--or2:#fb923c;--od:rgba(249,115,22,0.12);--ob:rgba(249,115,22,0.25);--t1:#f0f0f0;--t2:#999;--t3:#555;--br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.13);--gn:#22c55e;--gd:rgba(34,197,94,0.13);--yw:#eab308;--yd:rgba(234,179,8,0.13);--bl:#3b82f6;--bld:rgba(59,130,246,0.13);--rd:#ef4444;--rdd:rgba(239,68,68,0.13);}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:var(--t1);min-height:100vh}
+
+/* TOP */
+.top{background:var(--b1);border-bottom:0.5px solid var(--br);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:99}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-ic{width:32px;height:32px;background:var(--or);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-t{font-size:15px;font-weight:600;color:var(--t1)}.logo-s{font-size:10px;color:var(--t3)}
+.top-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2)}
+.admin-dot{width:8px;height:8px;border-radius:50%;background:var(--gn)}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat-c{background:var(--b2);border:0.5px solid var(--br);border-radius:10px;padding:14px 16px}
+.stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.stat-label{font-size:11px;color:var(--t2);font-weight:500}
+.stat-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.stat-val{font-size:24px;font-weight:600;color:var(--t1);margin-bottom:3px}
+.stat-sub{font-size:11px;color:var(--t3)}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--b2);border:0.5px solid var(--br);border-radius:7px;padding:0 12px;height:36px;flex:1;min-width:200px}
+.search-wrap input{border:none;background:transparent;flex:1;font-size:13px;color:var(--t1);outline:none}
+.search-wrap input::placeholder{color:var(--t3)}
+.filter-sel{padding:0 12px;height:36px;background:var(--b2);border:0.5px solid var(--br);border-radius:7px;font-size:12px;color:var(--t1);outline:none;cursor:pointer}
+.filter-sel option{background:var(--b3)}
+.btn-refresh{padding:0 14px;height:36px;background:var(--od);border:0.5px solid var(--ob);border-radius:7px;color:var(--or);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+.btn-export{padding:0 14px;height:36px;background:var(--b2);border:0.5px solid var(--br);border-radius:7px;color:var(--t2);font-size:12px;cursor:pointer;white-space:nowrap}
+.btn-export:hover{border-color:var(--or);color:var(--or)}
+
+/* TABLE */
+.table-wrap{background:var(--b2);border:0.5px solid var(--br);border-radius:10px;overflow:hidden}
+.table-head{display:flex;align-items:center;padding:10px 14px;border-bottom:0.5px solid var(--br);background:var(--b3)}
+.th{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
+.table-body{display:flex;flex-direction:column}
+.trow{display:flex;align-items:center;padding:12px 14px;border-bottom:0.5px solid var(--br);cursor:pointer;transition:background .15s}
+.trow:last-child{border-bottom:none}
+.trow:hover{background:var(--b3)}
+.td{font-size:12px;color:var(--t1)}
+.td.muted{color:var(--t2)}
+
+/* Column widths */
+.col-no{width:110px;flex-shrink:0}
+.col-nama{flex:1;min-width:120px}
+.col-mob{width:140px;flex-shrink:0}
+.col-servis{width:150px;flex-shrink:0}
+.col-tgl{width:120px;flex-shrink:0}
+.col-lokasi{width:100px;flex-shrink:0}
+.col-status{width:120px;flex-shrink:0}
+.col-aksi{width:80px;flex-shrink:0;text-align:right}
+
+/* STATUS BADGE */
+.sbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:500;white-space:nowrap}
+.sb-menunggu{background:var(--yd);color:var(--yw)}
+.sb-konfirmasi{background:var(--bld);color:var(--bl)}
+.sb-proses{background:var(--od);color:var(--or)}
+.sb-selesai{background:var(--gd);color:var(--gn)}
+.sb-batal{background:var(--rdd);color:var(--rd)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 20px}
+.empty-ico{font-size:40px;margin-bottom:12px}
+.empty-t{font-size:15px;font-weight:500;color:var(--t1);margin-bottom:6px}
+.empty-s{font-size:13px;color:var(--t2);margin-bottom:16px}
+.empty-btn{padding:9px 18px;background:var(--or);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer}
+
+/* MODAL DETAIL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.show{display:flex}
+.modal{background:var(--b1);border:0.5px solid var(--br2);border-radius:12px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:0.5px solid var(--br)}
+.modal-title{font-size:14px;font-weight:600;color:var(--t1)}
+.modal-close{width:28px;height:28px;border-radius:6px;background:var(--b3);border:none;color:var(--t2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-body{padding:16px 18px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.detail-item{background:var(--b2);border:0.5px solid var(--br);border-radius:7px;padding:10px 12px}
+.detail-item.full{grid-column:1/-1}
+.di-label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.di-val{font-size:13px;color:var(--t1);font-weight:500;word-break:break-word}
+.status-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.stat-btn{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--br2);background:var(--b3);color:var(--t2);transition:all .15s}
+.stat-btn:hover{border-color:var(--or);color:var(--or)}
+.stat-btn.active{background:var(--or);border-color:var(--or);color:#fff}
+.modal-footer{display:flex;gap:8px;padding:14px 18px;border-top:0.5px solid var(--br)}
+.btn-del{flex:1;padding:10px;background:var(--rdd);border:0.5px solid var(--rd);color:var(--rd);border-radius:7px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-save{flex:2;padding:10px;background:var(--or);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-save:hover{background:var(--or2)}
+
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-top:0.5px solid var(--br)}
+.pg-info{font-size:12px;color:var(--t2)}
+.pg-btns{display:flex;gap:4px}
+.pg-btn{width:30px;height:30px;border-radius:6px;background:var(--b3);border:0.5px solid var(--br);color:var(--t2);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pg-btn.on{background:var(--od);border-color:var(--ob);color:var(--or);font-weight:600}
+.pg-btn:hover:not(.on){border-color:var(--br2);color:var(--t1)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--b1);border:0.5px solid var(--or);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--t1);z-index:300;display:none;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast.show{display:flex}
+
+/* DEMO BANNER */
+.demo-banner{background:var(--od);border:0.5px solid var(--ob);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--or);display:flex;align-items:center;gap:8px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="logo">
+    <div class="logo-ic">🚗</div>
+    <div><div class="logo-t">AutoPrime Admin</div><div class="logo-s">Dashboard Booking</div></div>
+  </div>
+  <div class="top-badge"><div class="admin-dot"></div><span id="last-update">Memuat...</span></div>
+</div>
+
+<div class="main">
+
+  <div class="demo-banner">
+    💡 Data booking tersimpan di browser (localStorage). Isi form booking terlebih dahulu agar data muncul di sini. <a href="booking.html" style="color:var(--or);font-weight:600;margin-left:4px">→ Buka Form Booking</a>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stat-row">
+    <div class="stat-c">
+      <div class="stat-top"><div class="stat-label">Total Booking</div><div class="stat-ico" style="background:var(--od)">📋</div></div>
+      <div class="stat-val" id="s-total">0</div>
+      <div class="stat-sub">Semua waktu</div>
+    </div>
+    <div class="stat-c">
+      <div class="stat-top"><div class="stat-label">Menunggu</div><div class="stat-ico" style="background:var(--yd)">⏳</div></div>
+      <div class="stat-val" id="s-tunggu" style="color:var(--yw)">0</div>
+      <div class="stat-sub">Perlu konfirmasi</div>
+    </div>
+    <div class="stat-c">
+      <div class="stat-top"><div class="stat-label">Sedang Proses</div><div class="stat-ico" style="background:var(--od)">🔧</div></div>
+      <div class="stat-val" id="s-proses" style="color:var(--or)">0</div>
+      <div class="stat-sub">Di bengkel</div>
+    </div>
+    <div class="stat-c">
+      <div class="stat-top"><div class="stat-label">Selesai</div><div class="stat-ico" style="background:var(--gd)">✅</div></div>
+      <div class="stat-val" id="s-selesai" style="color:var(--gn)">0</div>
+      <div class="stat-sub">Bulan ini</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span style="font-size:13px;color:var(--t3)">🔍</span>
+      <input type="text" id="search-inp" placeholder="Cari nama, no. polisi, jenis servis..." oninput="renderTable()">
+    </div>
+    <select class="filter-sel" id="filter-status" onchange="renderTable()">
+      <option value="">Semua Status</option>
+      <option value="Menunggu">Menunggu</option>
+      <option value="Dikonfirmasi">Dikonfirmasi</option>
+      <option value="Proses">Proses</option>
+      <option value="Selesai">Selesai</option>
+      <option value="Batal">Batal</option>
+    </select>
+    <select class="filter-sel" id="filter-lokasi" onchange="renderTable()">
+      <option value="">Semua Lokasi</option>
+      <option value="Ke Bengkel">Ke Bengkel</option>
+      <option value="Home Service">Home Service</option>
+    </select>
+    <button class="btn-refresh" onclick="loadData()">⟳ Refresh</button>
+    <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <div class="table-head">
+      <div class="th col-no">No. Booking</div>
+      <div class="th col-nama">Nama / Telp</div>
+      <div class="th col-mob">Kendaraan</div>
+      <div class="th col-servis">Jenis Servis</div>
+      <div class="th col-tgl">Jadwal</div>
+      <div class="th col-lokasi">Lokasi</div>
+      <div class="th col-status">Status</div>
+      <div class="th col-aksi">Aksi</div>
+    </div>
+    <div class="table-body" id="table-body">
+      <div class="empty">
+        <div class="empty-ico">📭</div>
+        <div class="empty-t">Belum ada booking</div>
+        <div class="empty-s">Data booking akan muncul di sini setelah pelanggan mengisi form.</div>
+        <button class="empty-btn" onclick="window.location.href='booking.html'">Buka Form Booking</button>
+      </div>
+    </div>
+    <div class="pagination" id="pagination" style="display:none">
+      <div class="pg-info" id="pg-info"></div>
+      <div class="pg-btns" id="pg-btns"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-top">
+      <div class="modal-title" id="modal-title">Detail Booking</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid" id="detail-grid"></div>
+      <div style="font-size:12px;color:var(--t2);font-weight:500;margin-bottom:8px">Ubah Status Booking</div>
+      <div class="status-row" id="status-row"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-del" onclick="hapusBooking()">🗑 Hapus</button>
+      <button class="btn-save" onclick="simpanStatus()">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<script>
+var allData = [], filtered = [], currentIdx = null, currentStatus = '';
+var perPage = 10, currentPage = 1;
+
+var statusList = [
+  {key:'Menunggu',  cls:'sb-menunggu',   icon:'⏳'},
+  {key:'Dikonfirmasi', cls:'sb-konfirmasi', icon:'✅'},
+  {key:'Proses',    cls:'sb-proses',     icon:'🔧'},
+  {key:'Selesai',   cls:'sb-selesai',    icon:'🎉'},
+  {key:'Batal',     cls:'sb-batal',      icon:'❌'},
+];
+
+function statusCls(s){
+  var map={Menunggu:'sb-menunggu',Dikonfirmasi:'sb-konfirmasi',Proses:'sb-proses',Selesai:'sb-selesai',Batal:'sb-batal'};
+  return map[s]||'sb-menunggu';
+}
+function statusIcon(s){
+  var map={Menunggu:'⏳',Dikonfirmasi:'✅',Proses:'🔧',Selesai:'🎉',Batal:'❌'};
+  return map[s]||'⏳';
+}
+
+function loadData(){
+  allData = JSON.parse(localStorage.getItem('autoprime_bookings')||'[]');
+  // Inject contoh data jika kosong untuk preview
+  if(allData.length===0){
+    allData = [
+      {id:'AP-5001234',waktu:'17/04/2026, 09:12',nama:'Budi Santoso',telp:'081234567890',email:'budi@email.com',merek:'Toyota',model:'Avanza 1.3G',tahun:'2021',nopol:'DB 1234 AB',warna:'Putih',km:'45000',servis:'Ganti Oli & Filter',keluhan:'Oli sudah waktunya diganti, terakhir ganti 6 bulan lalu.',tgl:'18 Apr 2026',jam:'09:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'GoPay / OVO',status:'Menunggu'},
+      {id:'AP-5001235',waktu:'17/04/2026, 10:45',nama:'Sari Dewi',telp:'082198765432',email:'sari@email.com',merek:'Honda',model:'Jazz RS CVT',tahun:'2020',nopol:'DB 5678 CD',warna:'Merah',km:'32000',servis:'Servis AC & Isi Freon',keluhan:'AC kurang dingin, kadang mati sendiri.',tgl:'19 Apr 2026',jam:'10:00 WIB',lokasi:'Home Service',catatan:'Rumah di Jl. Piere Tendean No.5',pembayaran:'Transfer Bank',status:'Dikonfirmasi'},
+      {id:'AP-5001236',waktu:'17/04/2026, 13:20',nama:'Andi Prasetyo',telp:'085312345678',email:'-',merek:'Mitsubishi',model:'Xpander GLS',tahun:'2022',nopol:'DB 9012 EF',warna:'Silver',km:'18500',servis:'Spooring & Balancing',keluhan:'Setir terasa berat dan sedikit bergetar saat kecepatan tinggi.',tgl:'20 Apr 2026',jam:'13:00 WIB',lokasi:'Ke Bengkel',catatan:'Mohon cek juga ban belakang',pembayaran:'Bayar di Tempat',status:'Proses'},
+      {id:'AP-5001237',waktu:'16/04/2026, 08:30',nama:'Rini Wahyuni',telp:'089876543210',email:'rini@gmail.com',merek:'Daihatsu',model:'Terios TXA',tahun:'2019',nopol:'DB 3456 GH',warna:'Hitam',km:'67000',servis:'Tune-Up Lengkap',keluhan:'Mesin terasa berat, konsumsi BBM meningkat.',tgl:'16 Apr 2026',jam:'08:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'GoPay / OVO',status:'Selesai'},
+      {id:'AP-5001238',waktu:'16/04/2026, 14:00',nama:'Hendra Gunawan',telp:'081765432109',email:'hendra@email.com',merek:'Suzuki',model:'Ertiga GX',tahun:'2021',nopol:'DB 7890 IJ',warna:'Abu-abu',km:'28000',servis:'Inspeksi & Perbaikan Rem',keluhan:'Rem sering bunyi saat ditekan.',tgl:'17 Apr 2026',jam:'11:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'Transfer Bank',status:'Batal'},
+    ];
+  }
+  updateStats();
+  renderTable();
+  document.getElementById('last-update').textContent='Update: '+new Date().toLocaleTimeString('id-ID');
+}
+
+function updateStats(){
+  document.getElementById('s-total').textContent=allData.length;
+  document.getElementById('s-tunggu').textContent=allData.filter(function(d){return d.status==='Menunggu';}).length;
+  document.getElementById('s-proses').textContent=allData.filter(function(d){return d.status==='Proses';}).length;
+  document.getElementById('s-selesai').textContent=allData.filter(function(d){return d.status==='Selesai';}).length;
+}
+
+function renderTable(){
+  var q=document.getElementById('search-inp').value.toLowerCase();
+  var fs=document.getElementById('filter-status').value;
+  var fl=document.getElementById('filter-lokasi').value;
+
+  filtered=allData.filter(function(d){
+    var matchQ=!q||(d.nama+d.nopol+d.servis+d.id+d.telp).toLowerCase().includes(q);
+    var matchS=!fs||d.status===fs;
+    var matchL=!fl||d.lokasi===fl;
+    return matchQ&&matchS&&matchL;
+  });
+
+  var totalPage=Math.ceil(filtered.length/perPage)||1;
+  if(currentPage>totalPage)currentPage=1;
+  var start=(currentPage-1)*perPage;
+  var slice=filtered.slice(start,start+perPage);
+
+  var body=document.getElementById('table-body');
+  if(filtered.length===0){
+    body.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><div class="empty-t">Tidak ditemukan</div><div class="empty-s">Tidak ada booking yang cocok dengan filter/pencarian.</div></div>';
+    document.getElementById('pagination').style.display='none';
+    return;
+  }
+
+  body.innerHTML=slice.map(function(d,i){
+    var realIdx=allData.indexOf(d);
+    return '<div class="trow" onclick="openModal('+realIdx+')">'+
+      '<div class="td col-no" style="color:var(--or);font-weight:500">#'+d.id+'<div style="font-size:10px;color:var(--t3);margin-top:2px">'+d.waktu+'</div></div>'+
+      '<div class="td col-nama">'+d.nama+'<div class="muted" style="font-size:11px;margin-top:2px">'+d.telp+'</div></div>'+
+      '<div class="td col-mob">'+d.merek+' '+d.model+'<div class="muted" style="font-size:11px;margin-top:2px">'+d.nopol+'</div></div>'+
+      '<div class="td col-servis">'+d.servis+'</div>'+
+      '<div class="td col-tgl">'+d.tgl+'<div class="muted" style="font-size:11px;margin-top:2px">'+d.jam+'</div></div>'+
+      '<div class="td col-lokasi muted">'+d.lokasi+'</div>'+
+      '<div class="td col-status"><span class="sbadge '+statusCls(d.status)+'">'+statusIcon(d.status)+' '+d.status+'</span></div>'+
+      '<div class="td col-aksi"><span style="font-size:18px;color:var(--t3)">›</span></div>'+
+    '</div>';
+  }).join('');
+
+  // Pagination
+  var pgEl=document.getElementById('pagination');
+  var pgInfo=document.getElementById('pg-info');
+  var pgBtns=document.getElementById('pg-btns');
+  pgEl.style.display='flex';
+  pgInfo.textContent='Menampilkan '+(start+1)+'–'+Math.min(start+perPage,filtered.length)+' dari '+filtered.length+' booking';
+  var btnsHtml='';
+  for(var p=1;p<=totalPage;p++){
+    btnsHtml+='<button class="pg-btn'+(p===currentPage?' on':'') +'" onclick="goPage('+p+')">'+p+'</button>';
+  }
+  pgBtns.innerHTML=btnsHtml;
+}
+
+function goPage(p){currentPage=p;renderTable();}
+
+function openModal(idx){
+  currentIdx=idx;
+  var d=allData[idx];
+  currentStatus=d.status;
+  document.getElementById('modal-title').textContent='Detail Booking #'+d.id;
+
+  var fields=[
+    ['No. Booking','#'+d.id,'full'],['Waktu Submit',d.waktu,''],
+    ['Nama Pelanggan',d.nama,''],['Telepon',d.telp,''],
+    ['Email',d.email,'full'],
+    ['Merek Mobil',d.merek,''],['Model & Tipe',d.model,''],
+    ['Tahun',d.tahun,''],['No. Polisi',d.nopol,''],
+    ['Warna',d.warna,''],['Kilometer',d.km+' km',''],
+    ['Jenis Servis',d.servis,'full'],
+    ['Keluhan',d.keluhan,'full'],
+    ['Tanggal Servis',d.tgl,''],['Jam',d.jam,''],
+    ['Lokasi',d.lokasi,''],['Pembayaran',d.pembayaran,''],
+    ['Catatan',d.catatan,'full'],
+  ];
+
+  document.getElementById('detail-grid').innerHTML=fields.map(function(f){
+    return '<div class="detail-item'+(f[2]==='full'?' full':'')+'"><div class="di-label">'+f[0]+'</div><div class="di-val">'+f[1]+'</div></div>';
+  }).join('');
+
+  document.getElementById('status-row').innerHTML=statusList.map(function(s){
+    return '<button class="stat-btn'+(currentStatus===s.key?' active':'')+'" onclick="setStatus(\''+s.key+'\')">' + s.icon+' '+s.key+'</button>';
+  }).join('');
+
+  document.getElementById('overlay').classList.add('show');
+}
+
+function setStatus(s){
+  currentStatus=s;
+  document.querySelectorAll('.stat-btn').forEach(function(b){b.classList.remove('active');});
+  event.target.classList.add('active');
+}
+
+function simpanStatus(){
+  if(currentIdx===null)return;
+  allData[currentIdx].status=currentStatus;
+  localStorage.setItem('autoprime_bookings',JSON.stringify(allData));
+  closeModal();
+  updateStats();
+  renderTable();
+  showToast('✅ Status berhasil diperbarui!');
+}
+
+function hapusBooking(){
+  if(currentIdx===null)return;
+  if(!confirm('Hapus booking #'+allData[currentIdx].id+'? Tindakan ini tidak bisa dibatalkan.'))return;
+  allData.splice(currentIdx,1);
+  localStorage.setItem('autoprime_bookings',JSON.stringify(allData));
+  closeModal();
+  updateStats();
+  renderTable();
+  showToast('🗑 Booking berhasil dihapus.');
+}
+
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('overlay'))return;
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+
+function exportCSV(){
+  if(allData.length===0){alert('Tidak ada data untuk diekspor.');return;}
+  var headers=['No. Booking','Waktu','Nama','Telepon','Email','Merek','Model','Tahun','No. Polisi','Warna','KM','Jenis Servis','Keluhan','Tanggal','Jam','Lokasi','Catatan','Pembayaran','Status'];
+  var rows=allData.map(function(d){
+    return [d.id,d.waktu,d.nama,d.telp,d.email,d.merek,d.model,d.tahun,d.nopol,d.warna,d.km,d.servis,'"'+d.keluhan.replace(/"/g,'""')+'"',d.tgl,d.jam,d.lokasi,'"'+d.catatan.replace(/"/g,'""')+'"',d.pembayaran,d.status].join(',');
+  });
+  var csv=[headers.join(',')].concat(rows).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='autoprime-booking-'+Date.now()+'.csv';a.click();
+  URL.revokeObjectURL(url);
+  showToast('⬇ File CSV berhasil diunduh!');
+}
+
+loadData();
+</script>
+</body>
+</html>
