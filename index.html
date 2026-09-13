@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoPrime — Booking Servis</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b0:#0d0d0d;--b1:#141414;--b2:#1c1c1c;--b3:#252525;--or:#f97316;--or2:#fb923c;--od:rgba(249,115,22,0.12);--ob:rgba(249,115,22,0.28);--t1:#f0f0f0;--t2:#999;--t3:#555;--br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.14);--gn:#22c55e;--gd:rgba(34,197,94,0.13);--rd:#ef4444;--rdd:rgba(239,68,68,0.13);--yw:#eab308;}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:var(--t1);min-height:100vh}
+.top{background:var(--b1);border-bottom:0.5px solid var(--br);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:99}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-ic{width:32px;height:32px;background:var(--or);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-t{font-size:15px;font-weight:600;color:var(--t1)}.logo-s{font-size:10px;color:var(--t3)}
+.steps{display:flex;align-items:center;padding:18px 20px 0;background:var(--b1);border-bottom:0.5px solid var(--br)}
+.step{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:16px;left:calc(50% + 18px);right:calc(-50% + 18px);height:1.5px;background:var(--br2);z-index:0}
+.step.done:not(:last-child)::after{background:var(--or)}
+.step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;border:1.5px solid var(--br2);background:var(--b2);color:var(--t3);z-index:1;transition:all .3s}
+.step.active .step-num{background:var(--or);border-color:var(--or);color:#fff}
+.step.done .step-num{background:var(--gn);border-color:var(--gn);color:#fff;font-size:14px}
+.step-lbl{font-size:10px;color:var(--t3);white-space:nowrap;padding-bottom:10px}
+.step.active .step-lbl{color:var(--or);font-weight:500}.step.done .step-lbl{color:var(--gn)}
+.main{max-width:660px;margin:0 auto;padding:20px 16px 100px}
+.card{background:var(--b2);border:0.5px solid var(--br);border-radius:10px;padding:18px;margin-bottom:14px}
+.card-title{font-size:12px;font-weight:600;color:var(--or);margin-bottom:14px;display:flex;align-items:center;gap:7px;text-transform:uppercase;letter-spacing:.5px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
+.fg label{font-size:12px;color:var(--t2);font-weight:500}
+.fg input,.fg select,.fg textarea{padding:9px 12px;border:0.5px solid var(--br2);border-radius:7px;font-size:13px;background:var(--b3);color:var(--t1);outline:none;transition:border-color .15s;font-family:inherit;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--or);box-shadow:0 0 0 2px var(--od)}
+.fg select option{background:var(--b3)}.fg textarea{resize:vertical;min-height:72px}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--t3)}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.time-slot{background:var(--b3);border:0.5px solid var(--br2);border-radius:7px;padding:9px 4px;text-align:center;cursor:pointer;transition:all .15s;font-size:12px;color:var(--t2)}
+.time-slot:hover:not(.off){border-color:var(--or);color:var(--t1)}
+.time-slot.sel{background:var(--od);border-color:var(--or);color:var(--or);font-weight:600}
+.time-slot.off{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+.loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.loc-card{background:var(--b3);border:0.5px solid var(--br2);border-radius:8px;padding:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px}
+.loc-card:hover{border-color:var(--or)}.loc-card.sel{border-color:var(--or);background:var(--od)}
+.loc-ic{width:32px;height:32px;border-radius:7px;background:var(--b2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.loc-card.sel .loc-ic{background:var(--or)}
+.loc-name{font-size:12px;font-weight:500;color:var(--t1)}.loc-sub{font-size:10px;color:var(--t3);margin-top:1px}
+.rsum-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:13px;padding:8px 0;border-bottom:0.5px solid var(--br)}
+.rsum-row:last-child{border-bottom:none}.rsum-k{color:var(--t2);flex-shrink:0;width:140px}.rsum-v{color:var(--t1);font-weight:500;text-align:right}
+.pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pay-c{background:var(--b3);border:0.5px solid var(--br2);border-radius:8px;padding:11px 8px;text-align:center;cursor:pointer;transition:all .15s}
+.pay-c:hover{border-color:var(--or)}.pay-c.sel{border-color:var(--or);background:var(--od)}
+.pay-ico{font-size:20px;margin-bottom:4px}.pay-lbl{font-size:11px;color:var(--t2)}.pay-c.sel .pay-lbl{color:var(--or)}
+.alert{background:var(--rdd);border:0.5px solid var(--rd);border-radius:7px;padding:10px 13px;font-size:12px;color:var(--rd);margin-bottom:12px;display:none}
+.alert.show{display:block}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--b1);border-top:0.5px solid var(--br);padding:12px 20px;display:flex;gap:10px;z-index:99}
+.btn-back{padding:10px 18px;background:var(--b3);color:var(--t2);border:0.5px solid var(--br2);border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap}
+.btn-next{flex:1;padding:12px;background:var(--or);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.btn-next:hover{background:var(--or2)}
+.pg{display:none}.pg.on{display:block}
+.suc-wrap{text-align:center;padding:32px 16px}
+.suc-ico{width:72px;height:72px;border-radius:50%;background:var(--gd);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:34px;border:2.5px solid var(--gn)}
+.suc-t{font-size:20px;font-weight:600;color:var(--t1);margin-bottom:6px}
+.suc-s{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:22px}
+.ob-box{background:var(--b2);border:0.5px solid var(--br);border-radius:10px;padding:16px;text-align:left;margin-bottom:20px}
+.ob-row{display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:0.5px solid var(--br)}
+.ob-row:last-child{border-bottom:none}.ob-k{color:var(--t2)}.ob-v{color:var(--t1);font-weight:500}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="logo"><div class="logo-ic">🚗</div><div><div class="logo-t">AutoPrime</div><div class="logo-s">Servis & Sparepart</div></div></div>
+  <div style="font-size:13px;font-weight:500;color:var(--t1)">Booking Servis</div>
+  <div style="font-size:12px;color:var(--t3)" id="step-label">Langkah 1 / 3</div>
+</div>
+<div class="steps">
+  <div class="step active" id="step-1"><div class="step-num">1</div><div class="step-lbl">Data Mobil</div></div>
+  <div class="step" id="step-2"><div class="step-num">2</div><div class="step-lbl">Jadwal</div></div>
+  <div class="step" id="step-3"><div class="step-num">3</div><div class="step-lbl">Konfirmasi</div></div>
+</div>
+<div class="main">
+
+<!-- LANGKAH 1 -->
+<div id="p1" class="pg on">
+  <div class="alert" id="alert1">Harap lengkapi semua kolom wajib (*).</div>
+  <div class="card">
+    <div class="card-title"><span>👤</span> Data Pemilik</div>
+    <div class="fgrid">
+      <div class="fg"><label>Nama Lengkap <span style="color:var(--rd)">*</span></label><input type="text" id="nama" placeholder="Masukkan nama lengkap"></div>
+      <div class="fg"><label>Nomor Telepon <span style="color:var(--rd)">*</span></label><input type="tel" id="telp" placeholder="+62 8xx-xxxx-xxxx"></div>
+      <div class="fg full"><label>Alamat Email</label><input type="email" id="email" placeholder="email@contoh.com"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span>🚗</span> Data Kendaraan</div>
+    <div class="fgrid">
+      <div class="fg"><label>Merek Mobil <span style="color:var(--rd)">*</span></label>
+        <select id="merek"><option value="">Pilih merek</option><option>Toyota</option><option>Honda</option><option>Mitsubishi</option><option>Suzuki</option><option>Daihatsu</option><option>Nissan</option><option>Hyundai</option><option>Wuling</option><option>DFSK</option><option>Kia</option><option>Mazda</option><option>BMW</option><option>Mercedes-Benz</option><option>Audi</option><option>Isuzu</option><option>Lainnya</option></select>
+      </div>
+      <div class="fg"><label>Model & Tipe <span style="color:var(--rd)">*</span></label><input type="text" id="model" placeholder="Contoh: Avanza 1.3G"></div>
+      <div class="fg"><label>Tahun Produksi <span style="color:var(--rd)">*</span></label><input type="number" id="tahun" placeholder="Contoh: 2021" min="1990" max="2026"></div>
+      <div class="fg"><label>Nomor Polisi <span style="color:var(--rd)">*</span></label><input type="text" id="nopol" placeholder="Contoh: DB 1234 AB"></div>
+      <div class="fg"><label>Warna Kendaraan</label><input type="text" id="warna" placeholder="Contoh: Putih Metalik"></div>
+      <div class="fg"><label>Kilometer Saat Ini</label><input type="number" id="km" placeholder="Contoh: 45000"></div>
+      <div class="fg full"><label>Jenis Servis <span style="color:var(--rd)">*</span></label>
+        <select id="jenis-servis"><option value="">Pilih jenis servis</option><option>Ganti Oli & Filter</option><option>Tune-Up Lengkap</option><option>Inspeksi & Perbaikan Rem</option><option>Diagnosa Mesin</option><option>Servis AC & Isi Freon</option><option>Spooring & Balancing</option><option>Detailing & Cuci Mobil</option><option>Cek & Ganti Aki</option><option>Ganti Ban</option><option>Servis Suspensi</option><option>Lainnya</option></select>
+      </div>
+      <div class="fg full"><label>Keluhan / Gejala Kerusakan</label><textarea id="keluhan" placeholder="Jelaskan keluhan atau gejala yang dialami kendaraan Anda..."></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- LANGKAH 2 -->
+<div id="p2" class="pg">
+  <div class="alert" id="alert2">Pilih tanggal dan jam servis terlebih dahulu.</div>
+  <div class="card">
+    <div class="card-title"><span>📅</span> Tanggal Servis</div>
+    <div class="fgrid">
+      <div class="fg full"><label>Pilih Tanggal <span style="color:var(--rd)">*</span></label><input type="date" id="tgl" min=""></div>
+    </div>
+    <div style="margin-top:14px">
+      <div style="font-size:12px;color:var(--t2);font-weight:500;margin-bottom:8px">Pilih Jam Servis <span style="color:var(--rd)">*</span></div>
+      <div class="time-grid">
+        <div class="time-slot" onclick="pilihJam(this,'08:00')">08:00</div>
+        <div class="time-slot" onclick="pilihJam(this,'09:00')">09:00</div>
+        <div class="time-slot off">10:00</div>
+        <div class="time-slot" onclick="pilihJam(this,'11:00')">11:00</div>
+        <div class="time-slot" onclick="pilihJam(this,'13:00')">13:00</div>
+        <div class="time-slot off">14:00</div>
+        <div class="time-slot" onclick="pilihJam(this,'15:00')">15:00</div>
+        <div class="time-slot" onclick="pilihJam(this,'16:00')">16:00</div>
+      </div>
+      <div style="font-size:10px;color:var(--t3);margin-top:8px">Slot dicoret = sudah terisi</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span>📍</span> Lokasi Servis</div>
+    <div class="loc-grid">
+      <div class="loc-card sel" id="loc-bengkel" onclick="pilihLokasi('bengkel')"><div class="loc-ic">🏪</div><div><div class="loc-name">Ke Bengkel</div><div class="loc-sub">Gratis ongkir</div></div></div>
+      <div class="loc-card" id="loc-rumah" onclick="pilihLokasi('rumah')"><div class="loc-ic">🏠</div><div><div class="loc-name">Home Service</div><div class="loc-sub">+Rp 50.000</div></div></div>
+    </div>
+    <div class="fg full" id="alamat-box" style="display:none;margin-top:12px"><label>Alamat Lengkap <span style="color:var(--rd)">*</span></label><textarea id="alamat" placeholder="Masukkan alamat lengkap untuk home service..."></textarea></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span>📝</span> Catatan Tambahan</div>
+    <div class="fg full"><textarea id="catatan" placeholder="Informasi tambahan untuk mekanik (opsional)..."></textarea></div>
+  </div>
+</div>
+
+<!-- LANGKAH 3 -->
+<div id="p3" class="pg">
+  <div class="card"><div class="card-title"><span>📋</span> Ringkasan Booking</div><div id="ringkasan-box"></div></div>
+  <div class="card">
+    <div class="card-title"><span>💳</span> Metode Pembayaran DP</div>
+    <div class="pay-grid">
+      <div class="pay-c sel" id="pay-gopay" onclick="pilihPay('gopay',this)"><div class="pay-ico">📱</div><div class="pay-lbl">GoPay / OVO</div></div>
+      <div class="pay-c" id="pay-bank" onclick="pilihPay('bank',this)"><div class="pay-ico">🏦</div><div class="pay-lbl">Transfer Bank</div></div>
+      <div class="pay-c" id="pay-tunai" onclick="pilihPay('tunai',this)"><div class="pay-ico">💵</div><div class="pay-lbl">Bayar di Tempat</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--t3);margin-top:10px">* DP 30% diperlukan untuk konfirmasi booking</div>
+  </div>
+  <div class="card" style="border-color:var(--ob)">
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <input type="checkbox" id="setuju" style="margin-top:3px;accent-color:var(--or);width:15px;height:15px;flex-shrink:0">
+      <label for="setuju" style="font-size:12px;color:var(--t2);line-height:1.7;cursor:pointer">Saya menyetujui <span style="color:var(--or)">Syarat & Ketentuan</span> serta <span style="color:var(--or)">Kebijakan Privasi</span> AutoPrime.</label>
+    </div>
+  </div>
+</div>
+
+<!-- SUKSES -->
+<div id="p-suc" class="pg">
+  <div class="suc-wrap">
+    <div class="suc-ico">✓</div>
+    <div class="suc-t">Booking Berhasil!</div>
+    <div class="suc-s">Booking servis Anda telah dikonfirmasi.<br>Tim kami akan segera menghubungi Anda.</div>
+    <div class="ob-box" id="suc-detail"></div>
+    <button class="btn-next" style="width:100%;margin-bottom:10px" onclick="resetForm()">+ Buat Booking Baru</button>
+    <button class="btn-back" style="width:100%;text-align:center" onclick="window.location.href='admin.html'">🖥 Lihat Dashboard Admin</button>
+  </div>
+</div>
+</div>
+
+<div class="bottom-bar" id="bottom-bar">
+  <button class="btn-back" id="btn-back" onclick="prevStep()" style="display:none">← Kembali</button>
+  <button class="btn-next" id="btn-next" onclick="nextStep()">Lanjut →</button>
+</div>
+
+<script>
+var step=1,totalStep=3,selectedJam='',selectedLokasi='bengkel',selectedPay='gopay';
+document.getElementById('tgl').min=new Date().toISOString().split('T')[0];
+
+function updateUI(){
+  document.getElementById('step-label').textContent='Langkah '+step+' / '+totalStep;
+  for(var i=1;i<=totalStep;i++){
+    var el=document.getElementById('step-'+i);
+    el.classList.remove('active','done');
+    if(i<step){el.classList.add('done');el.querySelector('.step-num').textContent='✓';}
+    else if(i===step)el.classList.add('active');
+    else el.querySelector('.step-num').textContent=i;
+  }
+  document.getElementById('btn-back').style.display=step>1?'block':'none';
+  document.getElementById('btn-next').textContent=step===totalStep?'Konfirmasi Booking ✓':'Lanjut →';
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
+  document.getElementById('p'+step).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function validasi(){
+  if(step===1){
+    var ok=document.getElementById('nama').value.trim()&&document.getElementById('telp').value.trim()&&document.getElementById('merek').value&&document.getElementById('model').value.trim()&&document.getElementById('tahun').value.trim()&&document.getElementById('nopol').value.trim()&&document.getElementById('jenis-servis').value;
+    document.getElementById('alert1').classList.toggle('show',!ok);
+    return!!ok;
+  }
+  if(step===2){
+    var ok=document.getElementById('tgl').value&&selectedJam;
+    document.getElementById('alert2').classList.toggle('show',!ok);
+    return!!ok;
+  }
+  return true;
+}
+
+function nextStep(){
+  if(!validasi()){window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(step===totalStep){
+    if(!document.getElementById('setuju').checked){alert('Harap centang persetujuan terlebih dahulu.');return;}
+    submitBooking();return;
+  }
+  if(step===2)buatRingkasan();
+  step++;updateUI();
+}
+
+function prevStep(){if(step>1){step--;updateUI();}}
+
+function pilihJam(el,jam){
+  document.querySelectorAll('.time-slot').forEach(function(s){s.classList.remove('sel');});
+  el.classList.add('sel');selectedJam=jam;
+}
+
+function pilihLokasi(tipe){
+  selectedLokasi=tipe;
+  document.getElementById('loc-bengkel').classList.toggle('sel',tipe==='bengkel');
+  document.getElementById('loc-rumah').classList.toggle('sel',tipe==='rumah');
+  document.getElementById('alamat-box').style.display=tipe==='rumah'?'block':'none';
+}
+
+function pilihPay(tipe,el){
+  selectedPay=tipe;
+  document.querySelectorAll('.pay-c').forEach(function(e){e.classList.remove('sel');});
+  el.classList.add('sel');
+}
+
+function formatTgl(str){
+  if(!str)return'-';
+  var d=new Date(str+'T00:00:00');
+  var bln=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  return d.getDate()+' '+bln[d.getMonth()]+' '+d.getFullYear();
+}
+
+function buatRingkasan(){
+  var rows=[
+    ['Nama',document.getElementById('nama').value],
+    ['Telepon',document.getElementById('telp').value],
+    ['Email',document.getElementById('email').value||'-'],
+    ['Merek Mobil',document.getElementById('merek').value],
+    ['Model & Tipe',document.getElementById('model').value],
+    ['Tahun',document.getElementById('tahun').value],
+    ['No. Polisi',document.getElementById('nopol').value],
+    ['Warna',document.getElementById('warna').value||'-'],
+    ['Kilometer',document.getElementById('km').value?document.getElementById('km').value+' km':'-'],
+    ['Jenis Servis',document.getElementById('jenis-servis').value],
+    ['Keluhan',document.getElementById('keluhan').value||'-'],
+    ['Tanggal',formatTgl(document.getElementById('tgl').value)+' · '+selectedJam+' WIB'],
+    ['Lokasi',selectedLokasi==='bengkel'?'Ke Bengkel':'Home Service'],
+    ['Catatan',document.getElementById('catatan').value||'-'],
+  ];
+  document.getElementById('ringkasan-box').innerHTML=rows.map(function(r){
+    return '<div class="rsum-row"><span class="rsum-k">'+r[0]+'</span><span class="rsum-v">'+r[1]+'</span></div>';
+  }).join('');
+}
+
+function submitBooking(){
+  var noBooking='AP-'+Date.now().toString().slice(-7);
+  var payMap={gopay:'GoPay / OVO',bank:'Transfer Bank',tunai:'Bayar di Tempat'};
+  var data={
+    id:noBooking,
+    waktu:new Date().toLocaleString('id-ID'),
+    nama:document.getElementById('nama').value,
+    telp:document.getElementById('telp').value,
+    email:document.getElementById('email').value||'-',
+    merek:document.getElementById('merek').value,
+    model:document.getElementById('model').value,
+    tahun:document.getElementById('tahun').value,
+    nopol:document.getElementById('nopol').value,
+    warna:document.getElementById('warna').value||'-',
+    km:document.getElementById('km').value||'-',
+    servis:document.getElementById('jenis-servis').value,
+    keluhan:document.getElementById('keluhan').value||'-',
+    tgl:formatTgl(document.getElementById('tgl').value),
+    jam:selectedJam+' WIB',
+    lokasi:selectedLokasi==='bengkel'?'Ke Bengkel':'Home Service',
+    catatan:document.getElementById('catatan').value||'-',
+    pembayaran:payMap[selectedPay],
+    status:'Menunggu'
+  };
+  var list=JSON.parse(localStorage.getItem('autoprime_bookings')||'[]');
+  list.unshift(data);
+  localStorage.setItem('autoprime_bookings',JSON.stringify(list));
+
+  document.getElementById('suc-detail').innerHTML=
+    '<div class="ob-row"><span class="ob-k">No. Booking</span><span class="ob-v" style="color:var(--or)">#'+noBooking+'</span></div>'+
+    '<div class="ob-row"><span class="ob-k">Nama</span><span class="ob-v">'+data.nama+'</span></div>'+
+    '<div class="ob-row"><span class="ob-k">Kendaraan</span><span class="ob-v">'+data.merek+' '+data.model+' '+data.tahun+'</span></div>'+
+    '<div class="ob-row"><span class="ob-k">Jenis Servis</span><span class="ob-v">'+data.servis+'</span></div>'+
+    '<div class="ob-row"><span class="ob-k">Jadwal</span><span class="ob-v">'+data.tgl+' · '+data.jam+'</span></div>'+
+    '<div class="ob-row"><span class="ob-k">Lokasi</span><span class="ob-v">'+data.lokasi+'</span></div>'+
+    '<div class="ob-row"><span class="ob-k">Pembayaran</span><span class="ob-v">'+data.pembayaran+'</span></div>'+
+    '<div class="ob-row"><span class="ob-k">Status</span><span class="ob-v" style="color:var(--yw)">Menunggu Konfirmasi</span></div>';
+
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
+  document.getElementById('p-suc').classList.add('on');
+  document.getElementById('bottom-bar').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetForm(){
+  step=1;selectedJam='';selectedLokasi='bengkel';selectedPay='gopay';
+  document.querySelectorAll('input[type=text],input[type=tel],input[type=email],input[type=number],textarea').forEach(function(i){i.value='';});
+  ['merek','jenis-servis'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('tgl').value='';
+  document.querySelectorAll('.time-slot').forEach(function(s){s.classList.remove('sel');});
+  document.getElementById('loc-bengkel').classList.add('sel');
+  document.getElementById('loc-rumah').classList.remove('sel');
+  document.getElementById('alamat-box').style.display='none';
+  document.querySelectorAll('.pay-c').forEach(function(e){e.classList.remove('sel');});
+  document.getElementById('pay-gopay').classList.add('sel');
+  document.getElementById('setuju').checked=false;
+  document.getElementById('bottom-bar').style.display='flex';
+  for(var i=1;i<=totalStep;i++){var el=document.getElementById('step-'+i);el.classList.remove('active','done');el.querySelector('.step-num').textContent=i;}
+  updateUI();
+}
+</script>
+</body>
+</html>
