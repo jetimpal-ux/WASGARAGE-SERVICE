@@ -476,7 +476,7 @@ function renderTable(){
 
   var body=document.getElementById('table-body');
   if(filtered.length===0){
-    body.innerHTML='<div class="empty"><div class="empty-ico">'+(allData.length===0?'📭':'🔍')+'</div><div class="empty-t">'+(allData.length===0?'Belum ada booking':'Tidak ditemukan')+'</div><div class="empty-s">'+(allData.length===0?'Data booking akan muncul setelah pelanggan submit form.':'Tidak ada booking yang cocok dengan filter.')+'</div>'+(allData.length===0?'<button class="empty-btn" onclick="window.location.href=\'booking.html\'">Buka Form Booking</button>':'')+'</div>';
+    body.innerHTML='<div class="empty"><div class="empty-ico">'+(allData.length===0?'📭':'🔍')+'</div><div class="empty-t">'+(allData.length===0?'Belum ada booking':'Tidak ditemukan')+'</div><div class="empty-s">'+(allData.length===0?'Data booking akan muncul setelah pelanggan submit form.':'Tidak ada booking yang cocok dengan filter.')+'</div>'+(allData.length===0?'<button class="empty-btn" onclick="window.location.href=\'index.html\'">Buka Form Booking</button>':'')+'</div>';
     document.getElementById('pagination').style.display='none';
     return;
   }
