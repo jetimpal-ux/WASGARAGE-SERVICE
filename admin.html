@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoPrime — Dashboard Admin</title>
+<title> WAS Garage booking — Dashboard Admin</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--b0:#0d0d0d;--b1:#141414;--b2:#1c1c1c;--b3:#252525;--b4:#2e2e2e;--or:#f97316;--or2:#fb923c;--od:rgba(249,115,22,0.12);--ob:rgba(249,115,22,0.25);--t1:#f0f0f0;--t2:#999;--t3:#555;--br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.13);--gn:#22c55e;--gd:rgba(34,197,94,0.13);--yw:#eab308;--yd:rgba(234,179,8,0.13);--bl:#3b82f6;--bld:rgba(59,130,246,0.13);--rd:#ef4444;--rdd:rgba(239,68,68,0.13);}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:var(--t1);min-height:100vh}
-
 /* ── LOGIN PAGE ── */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--b0)}
 .login-card{background:var(--b1);border:0.5px solid var(--br2);border-radius:14px;padding:36px 32px;width:100%;max-width:380px;text-align:center}
@@ -166,7 +165,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:v
   <div class="login-wrap">
     <div class="login-card">
       <div class="login-logo">🚗</div>
-      <div class="login-title">AutoPrime Admin</div>
+      <div class="login-title">WAS Garage booking Admin</div>
       <div class="login-sub">Masukkan password untuk mengakses dashboard</div>
 
       <div class="login-error" id="login-error">❌ Password salah. Silakan coba lagi.</div>
@@ -192,7 +191,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:v
         Coba lagi dalam <span id="countdown">30</span> detik.
       </div>
 
-      <div class="login-hint">🔒 Halaman ini hanya untuk admin AutoPrime</div>
+      <div class="login-hint">🔒 Halaman ini hanya untuk admin WAS Garage</div>
     </div>
   </div>
 </div>
@@ -203,7 +202,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:v
 <div class="top">
   <div class="logo">
     <div class="logo-ic">🚗</div>
-    <div><div class="logo-t">AutoPrime Admin</div><div class="logo-s">Dashboard Booking</div></div>
+    <div><div class="logo-t">WAS Garage Admin</div><div class="logo-s">Dashboard Booking</div></div>
   </div>
   <div class="top-right">
     <div class="top-status"><div class="admin-dot" id="conn-dot" style="background:var(--t3)"></div><span id="conn-label">Belum terhubung</span></div>
@@ -629,7 +628,7 @@ function showToast(msg){
 // ─── LOGIN ────────────────────────────────────────────
 // !! GANTI USERNAME DAN PASSWORD DI SINI !!
 var ADMIN_USER = 'admin';
-var ADMIN_PASS = 'autoprime2024';
+var ADMIN_PASS = 'wasgarage2026';
 
 var loginAttempts = 0;
 var maxAttempts = 5;
