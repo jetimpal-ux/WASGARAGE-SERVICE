@@ -3,31 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAS Garage — Dashboard Admin</title>
+<title>AutoPrime — Dashboard Admin</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--b0:#0d0d0d;--b1:#141414;--b2:#1c1c1c;--b3:#252525;--b4:#2e2e2e;--or:#f97316;--or2:#fb923c;--od:rgba(249,115,22,0.12);--ob:rgba(249,115,22,0.25);--t1:#f0f0f0;--t2:#999;--t3:#555;--br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.13);--gn:#22c55e;--gd:rgba(34,197,94,0.13);--yw:#eab308;--yd:rgba(234,179,8,0.13);--bl:#3b82f6;--bld:rgba(59,130,246,0.13);--rd:#ef4444;--rdd:rgba(239,68,68,0.13);}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:var(--t1);min-height:100vh}
+
+/* ── LOGIN PAGE ── */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--b0)}
+.login-card{background:var(--b1);border:0.5px solid var(--br2);border-radius:14px;padding:36px 32px;width:100%;max-width:380px;text-align:center}
+.login-logo{width:56px;height:56px;background:var(--or);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px}
+.login-title{font-size:20px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--t2);margin-bottom:28px}
+.login-field{display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:14px}
+.login-field label{font-size:12px;color:var(--t2);font-weight:500}
+.login-input-wrap{position:relative}
+.login-inp{width:100%;padding:10px 40px 10px 12px;border:0.5px solid var(--br2);border-radius:8px;font-size:14px;background:var(--b3);color:var(--t1);outline:none;transition:border-color .15s;font-family:inherit}
+.login-inp:focus{border-color:var(--or);box-shadow:0 0 0 2px var(--od)}
+.login-inp::placeholder{color:var(--t3)}
+.toggle-pw{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;color:var(--t3);user-select:none}
+.login-error{background:var(--rdd);border:0.5px solid var(--rd);border-radius:7px;padding:9px 12px;font-size:12px;color:var(--rd);margin-bottom:12px;display:none;text-align:left}
+.login-error.show{display:block}
+.login-btn{width:100%;padding:12px;background:var(--or);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;margin-bottom:14px}
+.login-btn:hover{background:var(--or2)}
+.login-attempts{font-size:11px;color:var(--yw);margin-top:10px;display:none}
+.login-attempts.show{display:block}
+.login-locked{background:var(--rdd);border:0.5px solid var(--rd);border-radius:8px;padding:14px;margin-top:12px;font-size:12px;color:var(--rd);display:none;line-height:1.6}
+.login-locked.show{display:block}
 
 /* TOP */
 .top{background:var(--b1);border-bottom:0.5px solid var(--br);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:99}
 .logo{display:flex;align-items:center;gap:8px}
 .logo-ic{width:32px;height:32px;background:var(--or);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
 .logo-t{font-size:15px;font-weight:600;color:var(--t1)}.logo-s{font-size:10px;color:var(--t3)}
-.top-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2)}
+.top-right{display:flex;align-items:center;gap:8px}
 .admin-dot{width:8px;height:8px;border-radius:50%;background:var(--gn)}
+.top-status{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2)}
+
+/* SETUP BANNER */
+.setup-banner{background:var(--b2);border:0.5px solid var(--ob);border-radius:10px;padding:20px;margin-bottom:20px}
+.setup-title{font-size:14px;font-weight:600;color:var(--or);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.setup-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.setup-input{flex:1;min-width:260px;padding:9px 12px;border:0.5px solid var(--br2);border-radius:7px;font-size:13px;background:var(--b3);color:var(--t1);outline:none}
+.setup-input:focus{border-color:var(--or)}
+.setup-input::placeholder{color:var(--t3)}
+.btn-connect{padding:9px 18px;background:var(--or);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-connect:hover{background:var(--or2)}
+.btn-disconnect{padding:9px 14px;background:var(--rdd);border:0.5px solid var(--rd);color:var(--rd);border-radius:7px;font-size:12px;cursor:pointer;white-space:nowrap}
+.setup-hint{font-size:11px;color:var(--t3);margin-top:10px;line-height:1.6}
+.connected-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.conn-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gd);border:0.5px solid var(--gn);border-radius:7px;padding:7px 12px;font-size:12px;color:var(--gn);font-weight:500}
+.conn-url{font-size:11px;color:var(--t3);word-break:break-all;margin-top:6px}
 
 /* MAIN */
 .main{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
 
 /* STAT CARDS */
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
-.stat-c{background:var(--b2);border:0.5px solid var(--br);border-radius:10px;padding:14px 16px}
+.stat-c{background:var(--b2);border:0.5px solid var(--br);border-radius:10px;padding:14px 16px;transition:border-color .2s}
+.stat-c:hover{border-color:var(--br2)}
 .stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .stat-label{font-size:11px;color:var(--t2);font-weight:500}
 .stat-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px}
-.stat-val{font-size:24px;font-weight:600;color:var(--t1);margin-bottom:3px}
+.stat-val{font-size:26px;font-weight:700;color:var(--t1);margin-bottom:3px}
 .stat-sub{font-size:11px;color:var(--t3)}
+
+/* SOURCE TABS */
+.source-tabs{display:flex;gap:6px;margin-bottom:14px}
+.src-tab{padding:6px 14px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--br2);background:var(--b2);color:var(--t2);transition:all .15s}
+.src-tab.on{background:var(--od);color:var(--or);border-color:var(--ob)}
+.src-tab:hover:not(.on){color:var(--t1)}
 
 /* TOOLBAR */
 .toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
@@ -36,53 +81,56 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:v
 .search-wrap input::placeholder{color:var(--t3)}
 .filter-sel{padding:0 12px;height:36px;background:var(--b2);border:0.5px solid var(--br);border-radius:7px;font-size:12px;color:var(--t1);outline:none;cursor:pointer}
 .filter-sel option{background:var(--b3)}
-.btn-refresh{padding:0 14px;height:36px;background:var(--od);border:0.5px solid var(--ob);border-radius:7px;color:var(--or);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
-.btn-export{padding:0 14px;height:36px;background:var(--b2);border:0.5px solid var(--br);border-radius:7px;color:var(--t2);font-size:12px;cursor:pointer;white-space:nowrap}
+.btn-refresh{padding:0 14px;height:36px;background:var(--od);border:0.5px solid var(--ob);border-radius:7px;color:var(--or);font-size:12px;font-weight:500;cursor:pointer}
+.btn-export{padding:0 14px;height:36px;background:var(--b2);border:0.5px solid var(--br);border-radius:7px;color:var(--t2);font-size:12px;cursor:pointer}
 .btn-export:hover{border-color:var(--or);color:var(--or)}
 
 /* TABLE */
 .table-wrap{background:var(--b2);border:0.5px solid var(--br);border-radius:10px;overflow:hidden}
 .table-head{display:flex;align-items:center;padding:10px 14px;border-bottom:0.5px solid var(--br);background:var(--b3)}
 .th{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
-.table-body{display:flex;flex-direction:column}
 .trow{display:flex;align-items:center;padding:12px 14px;border-bottom:0.5px solid var(--br);cursor:pointer;transition:background .15s}
 .trow:last-child{border-bottom:none}
 .trow:hover{background:var(--b3)}
 .td{font-size:12px;color:var(--t1)}
 .td.muted{color:var(--t2)}
-
-/* Column widths */
 .col-no{width:110px;flex-shrink:0}
 .col-nama{flex:1;min-width:120px}
 .col-mob{width:140px;flex-shrink:0}
 .col-servis{width:150px;flex-shrink:0}
-.col-tgl{width:120px;flex-shrink:0}
+.col-tgl{width:130px;flex-shrink:0}
 .col-lokasi{width:100px;flex-shrink:0}
 .col-status{width:120px;flex-shrink:0}
-.col-aksi{width:80px;flex-shrink:0;text-align:right}
+.col-aksi{width:70px;flex-shrink:0;text-align:right}
 
 /* STATUS BADGE */
 .sbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:500;white-space:nowrap}
 .sb-menunggu{background:var(--yd);color:var(--yw)}
-.sb-konfirmasi{background:var(--bld);color:var(--bl)}
+.sb-dikonfirmasi{background:var(--bld);color:var(--bl)}
 .sb-proses{background:var(--od);color:var(--or)}
 .sb-selesai{background:var(--gd);color:var(--gn)}
 .sb-batal{background:var(--rdd);color:var(--rd)}
 
-/* EMPTY STATE */
+/* LOADING */
+.loading{text-align:center;padding:48px 20px}
+.spinner{width:36px;height:36px;border:3px solid var(--br2);border-top-color:var(--or);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-t{font-size:14px;color:var(--t2)}
+
+/* EMPTY */
 .empty{text-align:center;padding:48px 20px}
 .empty-ico{font-size:40px;margin-bottom:12px}
 .empty-t{font-size:15px;font-weight:500;color:var(--t1);margin-bottom:6px}
 .empty-s{font-size:13px;color:var(--t2);margin-bottom:16px}
 .empty-btn{padding:9px 18px;background:var(--or);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer}
 
-/* MODAL DETAIL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
 .overlay.show{display:flex}
 .modal{background:var(--b1);border:0.5px solid var(--br2);border-radius:12px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
 .modal-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:0.5px solid var(--br)}
 .modal-title{font-size:14px;font-weight:600;color:var(--t1)}
-.modal-close{width:28px;height:28px;border-radius:6px;background:var(--b3);border:none;color:var(--t2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-close{width:28px;height:28px;border-radius:6px;background:var(--b3);border:none;color:var(--t2);font-size:16px;cursor:pointer}
 .modal-body{padding:16px 18px}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .detail-item{background:var(--b2);border:0.5px solid var(--br);border-radius:7px;padding:10px 12px}
@@ -104,70 +152,134 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:v
 .pg-btns{display:flex;gap:4px}
 .pg-btn{width:30px;height:30px;border-radius:6px;background:var(--b3);border:0.5px solid var(--br);color:var(--t2);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .pg-btn.on{background:var(--od);border-color:var(--ob);color:var(--or);font-weight:600}
-.pg-btn:hover:not(.on){border-color:var(--br2);color:var(--t1)}
+.pg-btn:hover:not(.on){color:var(--t1)}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--b1);border:0.5px solid var(--or);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--t1);z-index:300;display:none;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--b1);border:0.5px solid var(--or);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--t1);z-index:300;display:none;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .toast.show{display:flex}
-
-/* DEMO BANNER */
-.demo-banner{background:var(--od);border:0.5px solid var(--ob);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--or);display:flex;align-items:center;gap:8px}
 </style>
 </head>
 <body>
 
+<!-- LOGIN PAGE -->
+<div id="login-page" style="display:block">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">🚗</div>
+      <div class="login-title">AutoPrime Admin</div>
+      <div class="login-sub">Masukkan password untuk mengakses dashboard</div>
+
+      <div class="login-error" id="login-error">❌ Password salah. Silakan coba lagi.</div>
+
+      <div class="login-field">
+        <label>Username</label>
+        <input type="text" class="login-inp" id="login-user" placeholder="Masukkan username" autocomplete="off">
+      </div>
+
+      <div class="login-field">
+        <label>Password</label>
+        <div class="login-input-wrap">
+          <input type="password" class="login-inp" id="login-pass" placeholder="Masukkan password" onkeydown="if(event.key==='Enter')doLogin()">
+          <span class="toggle-pw" onclick="togglePw()">👁</span>
+        </div>
+      </div>
+
+      <button class="login-btn" onclick="doLogin()">Masuk ke Dashboard</button>
+
+      <div class="login-attempts" id="login-attempts"></div>
+      <div class="login-locked" id="login-locked">
+        🔒 Akses dikunci sementara karena terlalu banyak percobaan gagal.<br>
+        Coba lagi dalam <span id="countdown">30</span> detik.
+      </div>
+
+      <div class="login-hint">🔒 Halaman ini hanya untuk admin AutoPrime</div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD (tersembunyi sampai login) -->
+<div id="dashboard-page" style="display:none">
+
 <div class="top">
   <div class="logo">
     <div class="logo-ic">🚗</div>
-    <div><div class="logo-t">WAS Garage Admin</div><div class="logo-s">Dashboard Booking</div></div>
+    <div><div class="logo-t">AutoPrime Admin</div><div class="logo-s">Dashboard Booking</div></div>
   </div>
-  <div class="top-badge"><div class="admin-dot"></div><span id="last-update">Memuat...</span></div>
+  <div class="top-right">
+    <div class="top-status"><div class="admin-dot" id="conn-dot" style="background:var(--t3)"></div><span id="conn-label">Belum terhubung</span></div>
+    <a href="index.html" style="font-size:12px;color:var(--or);text-decoration:none;padding:5px 10px;border:0.5px solid var(--ob);border-radius:6px;background:var(--od)">+ Booking Baru</a>
+    <button onclick="logout()" style="padding:5px 12px;background:var(--rdd);border:0.5px solid var(--rd);border-radius:6px;color:var(--rd);font-size:12px;cursor:pointer;font-weight:500">🚪 Keluar</button>
+  </div>
 </div>
 
 <div class="main">
 
-    <!-- STAT CARDS -->
+  <!-- SETUP KONEKSI GOOGLE SHEETS -->
+  <div class="setup-banner" id="setup-banner">
+    <div class="setup-title">🔗 Hubungkan ke Google Sheets</div>
+    <div id="setup-form">
+      <div class="setup-input-row">
+        <input type="text" class="setup-input" id="script-url-input"
+          placeholder="Paste URL Google Apps Script Anda di sini...">
+        <button class="btn-connect" onclick="hubungkan()">Hubungkan</button>
+      </div>
+      <div class="setup-hint">
+        💡 Belum punya URL? Ikuti langkah ini:<br>
+        1. Buka <strong>Google Sheets</strong> Anda → <strong>Ekstensi → Apps Script</strong><br>
+        2. Paste kode dari file <strong>apps-script.gs</strong> → Simpan<br>
+        3. Klik <strong>Deploy → New deployment → Web App</strong><br>
+        4. Set <em>"Who has access"</em> ke <strong>Anyone</strong> → Deploy → Salin URL → Paste di atas
+      </div>
+    </div>
+    <div id="connected-state" style="display:none">
+      <div class="connected-info">
+        <div class="conn-badge">✅ Terhubung ke Google Sheets</div>
+        <button class="btn-disconnect" onclick="putuskan()">Putuskan</button>
+      </div>
+      <div class="conn-url" id="conn-url-display"></div>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
   <div class="stat-row">
     <div class="stat-c">
       <div class="stat-top"><div class="stat-label">Total Booking</div><div class="stat-ico" style="background:var(--od)">📋</div></div>
-      <div class="stat-val" id="s-total">0</div>
-      <div class="stat-sub">Semua waktu</div>
+      <div class="stat-val" id="s-total">0</div><div class="stat-sub">Semua waktu</div>
     </div>
     <div class="stat-c">
       <div class="stat-top"><div class="stat-label">Menunggu</div><div class="stat-ico" style="background:var(--yd)">⏳</div></div>
-      <div class="stat-val" id="s-tunggu" style="color:var(--yw)">0</div>
-      <div class="stat-sub">Perlu konfirmasi</div>
+      <div class="stat-val" id="s-tunggu" style="color:var(--yw)">0</div><div class="stat-sub">Perlu konfirmasi</div>
     </div>
     <div class="stat-c">
       <div class="stat-top"><div class="stat-label">Sedang Proses</div><div class="stat-ico" style="background:var(--od)">🔧</div></div>
-      <div class="stat-val" id="s-proses" style="color:var(--or)">0</div>
-      <div class="stat-sub">Di bengkel</div>
+      <div class="stat-val" id="s-proses" style="color:var(--or)">0</div><div class="stat-sub">Di bengkel</div>
     </div>
     <div class="stat-c">
       <div class="stat-top"><div class="stat-label">Selesai</div><div class="stat-ico" style="background:var(--gd)">✅</div></div>
-      <div class="stat-val" id="s-selesai" style="color:var(--gn)">0</div>
-      <div class="stat-sub">Bulan ini</div>
+      <div class="stat-val" id="s-selesai" style="color:var(--gn)">0</div><div class="stat-sub">Semua waktu</div>
     </div>
+  </div>
+
+  <!-- SOURCE TABS -->
+  <div class="source-tabs">
+    <div class="src-tab on" id="tab-sheets" onclick="switchTab('sheets')">☁️ Google Sheets</div>
+    <div class="src-tab" id="tab-local" onclick="switchTab('local')">💾 Data Lokal</div>
   </div>
 
   <!-- TOOLBAR -->
   <div class="toolbar">
     <div class="search-wrap">
       <span style="font-size:13px;color:var(--t3)">🔍</span>
-      <input type="text" id="search-inp" placeholder="Cari nama, no. polisi, jenis servis..." oninput="renderTable()">
+      <input type="text" id="search-inp" placeholder="Cari nama, no. polisi, jenis servis, no. booking..." oninput="renderTable()">
     </div>
     <select class="filter-sel" id="filter-status" onchange="renderTable()">
       <option value="">Semua Status</option>
-      <option value="Menunggu">Menunggu</option>
-      <option value="Dikonfirmasi">Dikonfirmasi</option>
-      <option value="Proses">Proses</option>
-      <option value="Selesai">Selesai</option>
-      <option value="Batal">Batal</option>
+      <option>Menunggu</option><option>Dikonfirmasi</option>
+      <option>Proses</option><option>Selesai</option><option>Batal</option>
     </select>
     <select class="filter-sel" id="filter-lokasi" onchange="renderTable()">
       <option value="">Semua Lokasi</option>
-      <option value="Ke Bengkel">Ke Bengkel</option>
-      <option value="Home Service">Home Service</option>
+      <option>Ke Bengkel</option><option>Home Service</option>
     </select>
     <button class="btn-refresh" onclick="loadData()">⟳ Refresh</button>
     <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
@@ -185,14 +297,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:v
       <div class="th col-status">Status</div>
       <div class="th col-aksi">Aksi</div>
     </div>
-    <div class="table-body" id="table-body">
-      <div class="empty">
-        <div class="empty-ico">📭</div>
-        <div class="empty-t">Belum ada booking</div>
-        <div class="empty-s">Data booking akan muncul di sini setelah pelanggan mengisi form.</div>
-        <button class="empty-btn" onclick="window.location.href='booking.html'">Buka Form Booking</button>
-      </div>
-    </div>
+    <div id="table-body"></div>
     <div class="pagination" id="pagination" style="display:none">
       <div class="pg-info" id="pg-info"></div>
       <div class="pg-btns" id="pg-btns"></div>
@@ -211,6 +316,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:v
       <div class="detail-grid" id="detail-grid"></div>
       <div style="font-size:12px;color:var(--t2);font-weight:500;margin-bottom:8px">Ubah Status Booking</div>
       <div class="status-row" id="status-row"></div>
+      <div style="font-size:11px;color:var(--t3);margin-top:4px" id="sheets-note"></div>
     </div>
     <div class="modal-footer">
       <button class="btn-del" onclick="hapusBooking()">🗑 Hapus</button>
@@ -223,43 +329,127 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--b0);color:v
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
-var allData = [], filtered = [], currentIdx = null, currentStatus = '';
-var perPage = 10, currentPage = 1;
+// ─── STATE ───────────────────────────────────────────
+var allData=[], filtered=[], currentIdx=null, currentStatus='';
+var perPage=10, currentPage=1, activeTab='sheets';
+var SCRIPT_URL = localStorage.getItem('autoprime_script_url')||'';
 
-var statusList = [
+var STATUS_LIST=[
   {key:'Menunggu',  cls:'sb-menunggu',   icon:'⏳'},
-  {key:'Dikonfirmasi', cls:'sb-konfirmasi', icon:'✅'},
+  {key:'Dikonfirmasi',cls:'sb-dikonfirmasi',icon:'✅'},
   {key:'Proses',    cls:'sb-proses',     icon:'🔧'},
   {key:'Selesai',   cls:'sb-selesai',    icon:'🎉'},
   {key:'Batal',     cls:'sb-batal',      icon:'❌'},
 ];
 
-function statusCls(s){
-  var map={Menunggu:'sb-menunggu',Dikonfirmasi:'sb-konfirmasi',Proses:'sb-proses',Selesai:'sb-selesai',Batal:'sb-batal'};
-  return map[s]||'sb-menunggu';
-}
-function statusIcon(s){
-  var map={Menunggu:'⏳',Dikonfirmasi:'✅',Proses:'🔧',Selesai:'🎉',Batal:'❌'};
-  return map[s]||'⏳';
+function statusCls(s){var m={Menunggu:'sb-menunggu',Dikonfirmasi:'sb-dikonfirmasi',Proses:'sb-proses',Selesai:'sb-selesai',Batal:'sb-batal'};return m[s]||'sb-menunggu';}
+function statusIcon(s){var m={Menunggu:'⏳',Dikonfirmasi:'✅',Proses:'🔧',Selesai:'🎉',Batal:'❌'};return m[s]||'⏳';}
+
+// ─── INIT ─────────────────────────────────────────────
+window.onload = function(){
+  if(SCRIPT_URL) tampilkanConnected();
+  else tampilkanSetup();
+  loadData();
+};
+
+// ─── KONEKSI ──────────────────────────────────────────
+function hubungkan(){
+  var url = document.getElementById('script-url-input').value.trim();
+  if(!url || !url.includes('script.google.com')){
+    showToast('❌ URL tidak valid. Pastikan URL dari Google Apps Script.');
+    return;
+  }
+  SCRIPT_URL = url;
+  localStorage.setItem('autoprime_script_url', url);
+  tampilkanConnected();
+  loadData();
+  showToast('✅ Berhasil terhubung ke Google Sheets!');
 }
 
+function putuskan(){
+  if(!confirm('Putuskan koneksi ke Google Sheets?')) return;
+  SCRIPT_URL='';
+  localStorage.removeItem('autoprime_script_url');
+  tampilkanSetup();
+  document.getElementById('conn-dot').style.background='var(--t3)';
+  document.getElementById('conn-label').textContent='Belum terhubung';
+  loadData();
+}
+
+function tampilkanConnected(){
+  document.getElementById('setup-form').style.display='none';
+  document.getElementById('connected-state').style.display='block';
+  document.getElementById('conn-url-display').textContent=SCRIPT_URL;
+  document.getElementById('conn-dot').style.background='var(--gn)';
+  document.getElementById('conn-label').textContent='Terhubung ke Google Sheets';
+}
+
+function tampilkanSetup(){
+  document.getElementById('setup-form').style.display='block';
+  document.getElementById('connected-state').style.display='none';
+}
+
+// ─── LOAD DATA ────────────────────────────────────────
 function loadData(){
+  if(activeTab==='sheets' && SCRIPT_URL){
+    loadDariSheets();
+  } else {
+    loadDariLokal();
+  }
+}
+
+function loadDariSheets(){
+  showLoading();
+  fetch(SCRIPT_URL + '?action=getAll', {method:'GET', mode:'cors'})
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      if(json.success && json.data){
+        allData = json.data;
+        updateStats(); renderTable();
+        document.getElementById('conn-dot').style.background='var(--gn)';
+        document.getElementById('last-update-time','');
+        showToast('☁️ Data berhasil dimuat dari Google Sheets ('+allData.length+' booking)');
+      } else {
+        showToast('⚠️ Gagal membaca data dari Sheets. Cek kode Apps Script Anda.');
+        loadDariLokal();
+      }
+    })
+    .catch(function(){
+      showToast('⚠️ Tidak dapat terhubung ke Sheets. Menampilkan data lokal.');
+      loadDariLokal();
+    });
+}
+
+function loadDariLokal(){
   allData = JSON.parse(localStorage.getItem('autoprime_bookings')||'[]');
-  // Inject contoh data jika kosong untuk preview
-  if(allData.length===0){
-    allData = [
-      {id:'AP-5001234',waktu:'17/04/2026, 09:12',nama:'Budi Santoso',telp:'081234567890',email:'budi@email.com',merek:'Toyota',model:'Avanza 1.3G',tahun:'2021',nopol:'DB 1234 AB',warna:'Putih',km:'45000',servis:'Ganti Oli & Filter',keluhan:'Oli sudah waktunya diganti, terakhir ganti 6 bulan lalu.',tgl:'18 Apr 2026',jam:'09:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'GoPay / OVO',status:'Menunggu'},
-      {id:'AP-5001235',waktu:'17/04/2026, 10:45',nama:'Sari Dewi',telp:'082198765432',email:'sari@email.com',merek:'Honda',model:'Jazz RS CVT',tahun:'2020',nopol:'DB 5678 CD',warna:'Merah',km:'32000',servis:'Servis AC & Isi Freon',keluhan:'AC kurang dingin, kadang mati sendiri.',tgl:'19 Apr 2026',jam:'10:00 WIB',lokasi:'Home Service',catatan:'Rumah di Jl. Piere Tendean No.5',pembayaran:'Transfer Bank',status:'Dikonfirmasi'},
-      {id:'AP-5001236',waktu:'17/04/2026, 13:20',nama:'Andi Prasetyo',telp:'085312345678',email:'-',merek:'Mitsubishi',model:'Xpander GLS',tahun:'2022',nopol:'DB 9012 EF',warna:'Silver',km:'18500',servis:'Spooring & Balancing',keluhan:'Setir terasa berat dan sedikit bergetar saat kecepatan tinggi.',tgl:'20 Apr 2026',jam:'13:00 WIB',lokasi:'Ke Bengkel',catatan:'Mohon cek juga ban belakang',pembayaran:'Bayar di Tempat',status:'Proses'},
-      {id:'AP-5001237',waktu:'16/04/2026, 08:30',nama:'Rini Wahyuni',telp:'089876543210',email:'rini@gmail.com',merek:'Daihatsu',model:'Terios TXA',tahun:'2019',nopol:'DB 3456 GH',warna:'Hitam',km:'67000',servis:'Tune-Up Lengkap',keluhan:'Mesin terasa berat, konsumsi BBM meningkat.',tgl:'16 Apr 2026',jam:'08:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'GoPay / OVO',status:'Selesai'},
-      {id:'AP-5001238',waktu:'16/04/2026, 14:00',nama:'Hendra Gunawan',telp:'081765432109',email:'hendra@email.com',merek:'Suzuki',model:'Ertiga GX',tahun:'2021',nopol:'DB 7890 IJ',warna:'Abu-abu',km:'28000',servis:'Inspeksi & Perbaikan Rem',keluhan:'Rem sering bunyi saat ditekan.',tgl:'17 Apr 2026',jam:'11:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'Transfer Bank',status:'Batal'},
+  // Inject data demo jika kosong
+  if(allData.length===0 && activeTab==='sheets'){
+    allData=[
+      {id:'AP-5001234',waktu:'17/04/2026, 09:12',nama:'Budi Santoso',telp:'081234567890',email:'budi@email.com',merek:'Toyota',model:'Avanza 1.3G',tahun:'2021',nopol:'DB 1234 AB',warna:'Putih',km:'45000',servis:'Ganti Oli & Filter',keluhan:'Oli sudah waktunya diganti.',tgl:'18 Apr 2026',jam:'09:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'GoPay / OVO',status:'Menunggu'},
+      {id:'AP-5001235',waktu:'17/04/2026, 10:45',nama:'Sari Dewi',telp:'082198765432',email:'sari@email.com',merek:'Honda',model:'Jazz RS CVT',tahun:'2020',nopol:'DB 5678 CD',warna:'Merah',km:'32000',servis:'Servis AC & Isi Freon',keluhan:'AC kurang dingin.',tgl:'19 Apr 2026',jam:'10:00 WIB',lokasi:'Home Service',catatan:'Rumah di Jl. Piere Tendean No.5',pembayaran:'Transfer Bank',status:'Dikonfirmasi'},
+      {id:'AP-5001236',waktu:'17/04/2026, 13:20',nama:'Andi Prasetyo',telp:'085312345678',email:'-',merek:'Mitsubishi',model:'Xpander GLS',tahun:'2022',nopol:'DB 9012 EF',warna:'Silver',km:'18500',servis:'Spooring & Balancing',keluhan:'Setir bergetar.',tgl:'20 Apr 2026',jam:'13:00 WIB',lokasi:'Ke Bengkel',catatan:'Cek ban belakang',pembayaran:'Bayar di Tempat',status:'Proses'},
+      {id:'AP-5001237',waktu:'16/04/2026, 08:30',nama:'Rini Wahyuni',telp:'089876543210',email:'rini@gmail.com',merek:'Daihatsu',model:'Terios TXA',tahun:'2019',nopol:'DB 3456 GH',warna:'Hitam',km:'67000',servis:'Tune-Up Lengkap',keluhan:'Mesin terasa berat.',tgl:'16 Apr 2026',jam:'08:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'GoPay / OVO',status:'Selesai'},
+      {id:'AP-5001238',waktu:'16/04/2026, 14:00',nama:'Hendra Gunawan',telp:'081765432109',email:'hendra@email.com',merek:'Suzuki',model:'Ertiga GX',tahun:'2021',nopol:'DB 7890 IJ',warna:'Abu-abu',km:'28000',servis:'Inspeksi & Perbaikan Rem',keluhan:'Rem bunyi saat ditekan.',tgl:'17 Apr 2026',jam:'11:00 WIB',lokasi:'Ke Bengkel',catatan:'-',pembayaran:'Transfer Bank',status:'Batal'},
     ];
   }
-  updateStats();
-  renderTable();
-  document.getElementById('last-update').textContent='Update: '+new Date().toLocaleTimeString('id-ID');
+  updateStats(); renderTable();
 }
 
+function showLoading(){
+  document.getElementById('table-body').innerHTML='<div class="loading"><div class="spinner"></div><div class="loading-t">Memuat data dari Google Sheets...</div></div>';
+  document.getElementById('pagination').style.display='none';
+}
+
+// ─── TABS ─────────────────────────────────────────────
+function switchTab(tab){
+  activeTab=tab;
+  document.getElementById('tab-sheets').classList.toggle('on', tab==='sheets');
+  document.getElementById('tab-local').classList.toggle('on', tab==='local');
+  currentPage=1;
+  loadData();
+}
+
+// ─── STATS ────────────────────────────────────────────
 function updateStats(){
   document.getElementById('s-total').textContent=allData.length;
   document.getElementById('s-tunggu').textContent=allData.filter(function(d){return d.status==='Menunggu';}).length;
@@ -267,31 +457,32 @@ function updateStats(){
   document.getElementById('s-selesai').textContent=allData.filter(function(d){return d.status==='Selesai';}).length;
 }
 
+// ─── RENDER TABLE ─────────────────────────────────────
 function renderTable(){
   var q=document.getElementById('search-inp').value.toLowerCase();
   var fs=document.getElementById('filter-status').value;
   var fl=document.getElementById('filter-lokasi').value;
 
   filtered=allData.filter(function(d){
-    var matchQ=!q||(d.nama+d.nopol+d.servis+d.id+d.telp).toLowerCase().includes(q);
+    var matchQ=!q||(d.nama+d.nopol+d.servis+d.id+d.telp+d.merek).toLowerCase().includes(q);
     var matchS=!fs||d.status===fs;
     var matchL=!fl||d.lokasi===fl;
     return matchQ&&matchS&&matchL;
   });
 
   var totalPage=Math.ceil(filtered.length/perPage)||1;
-  if(currentPage>totalPage)currentPage=1;
+  if(currentPage>totalPage) currentPage=1;
   var start=(currentPage-1)*perPage;
   var slice=filtered.slice(start,start+perPage);
 
   var body=document.getElementById('table-body');
   if(filtered.length===0){
-    body.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><div class="empty-t">Tidak ditemukan</div><div class="empty-s">Tidak ada booking yang cocok dengan filter/pencarian.</div></div>';
+    body.innerHTML='<div class="empty"><div class="empty-ico">'+(allData.length===0?'📭':'🔍')+'</div><div class="empty-t">'+(allData.length===0?'Belum ada booking':'Tidak ditemukan')+'</div><div class="empty-s">'+(allData.length===0?'Data booking akan muncul setelah pelanggan submit form.':'Tidak ada booking yang cocok dengan filter.')+'</div>'+(allData.length===0?'<button class="empty-btn" onclick="window.location.href=\'booking.html\'">Buka Form Booking</button>':'')+'</div>';
     document.getElementById('pagination').style.display='none';
     return;
   }
 
-  body.innerHTML=slice.map(function(d,i){
+  body.innerHTML=slice.map(function(d){
     var realIdx=allData.indexOf(d);
     return '<div class="trow" onclick="openModal('+realIdx+')">'+
       '<div class="td col-no" style="color:var(--or);font-weight:500">#'+d.id+'<div style="font-size:10px;color:var(--t3);margin-top:2px">'+d.waktu+'</div></div>'+
@@ -301,25 +492,21 @@ function renderTable(){
       '<div class="td col-tgl">'+d.tgl+'<div class="muted" style="font-size:11px;margin-top:2px">'+d.jam+'</div></div>'+
       '<div class="td col-lokasi muted">'+d.lokasi+'</div>'+
       '<div class="td col-status"><span class="sbadge '+statusCls(d.status)+'">'+statusIcon(d.status)+' '+d.status+'</span></div>'+
-      '<div class="td col-aksi"><span style="font-size:18px;color:var(--t3)">›</span></div>'+
+      '<div class="td col-aksi" style="color:var(--t3);font-size:18px">›</div>'+
     '</div>';
   }).join('');
 
-  // Pagination
   var pgEl=document.getElementById('pagination');
-  var pgInfo=document.getElementById('pg-info');
-  var pgBtns=document.getElementById('pg-btns');
   pgEl.style.display='flex';
-  pgInfo.textContent='Menampilkan '+(start+1)+'–'+Math.min(start+perPage,filtered.length)+' dari '+filtered.length+' booking';
-  var btnsHtml='';
-  for(var p=1;p<=totalPage;p++){
-    btnsHtml+='<button class="pg-btn'+(p===currentPage?' on':'') +'" onclick="goPage('+p+')">'+p+'</button>';
-  }
-  pgBtns.innerHTML=btnsHtml;
+  document.getElementById('pg-info').textContent='Menampilkan '+(start+1)+'–'+Math.min(start+perPage,filtered.length)+' dari '+filtered.length+' booking';
+  var btns='';
+  for(var p=1;p<=totalPage;p++) btns+='<button class="pg-btn'+(p===currentPage?' on':'')+'" onclick="goPage('+p+')">'+p+'</button>';
+  document.getElementById('pg-btns').innerHTML=btns;
 }
 
 function goPage(p){currentPage=p;renderTable();}
 
+// ─── MODAL ────────────────────────────────────────────
 function openModal(idx){
   currentIdx=idx;
   var d=allData[idx];
@@ -328,11 +515,11 @@ function openModal(idx){
 
   var fields=[
     ['No. Booking','#'+d.id,'full'],['Waktu Submit',d.waktu,''],
-    ['Nama Pelanggan',d.nama,''],['Telepon',d.telp,''],
+    ['Nama',d.nama,''],['Telepon',d.telp,''],
     ['Email',d.email,'full'],
-    ['Merek Mobil',d.merek,''],['Model & Tipe',d.model,''],
+    ['Merek',d.merek,''],['Model & Tipe',d.model,''],
     ['Tahun',d.tahun,''],['No. Polisi',d.nopol,''],
-    ['Warna',d.warna,''],['Kilometer',d.km+' km',''],
+    ['Warna',d.warna,''],['Kilometer',d.km,''],
     ['Jenis Servis',d.servis,'full'],
     ['Keluhan',d.keluhan,'full'],
     ['Tanggal Servis',d.tgl,''],['Jam',d.jam,''],
@@ -344,68 +531,187 @@ function openModal(idx){
     return '<div class="detail-item'+(f[2]==='full'?' full':'')+'"><div class="di-label">'+f[0]+'</div><div class="di-val">'+f[1]+'</div></div>';
   }).join('');
 
-  document.getElementById('status-row').innerHTML=statusList.map(function(s){
-    return '<button class="stat-btn'+(currentStatus===s.key?' active':'')+'" onclick="setStatus(\''+s.key+'\')">' + s.icon+' '+s.key+'</button>';
+  document.getElementById('status-row').innerHTML=STATUS_LIST.map(function(s){
+    return '<button class="stat-btn'+(currentStatus===s.key?' active':'')+'" onclick="setStatus(\''+s.key+'\',this)">'+s.icon+' '+s.key+'</button>';
   }).join('');
+
+  document.getElementById('sheets-note').textContent= (activeTab==='sheets' && SCRIPT_URL)
+    ? '* Perubahan status akan diperbarui di Google Sheets'
+    : '* Perubahan status hanya disimpan di data lokal';
 
   document.getElementById('overlay').classList.add('show');
 }
 
-function setStatus(s){
+function setStatus(s, el){
   currentStatus=s;
   document.querySelectorAll('.stat-btn').forEach(function(b){b.classList.remove('active');});
-  event.target.classList.add('active');
+  el.classList.add('active');
 }
 
 function simpanStatus(){
-  if(currentIdx===null)return;
+  if(currentIdx===null) return;
   allData[currentIdx].status=currentStatus;
-  localStorage.setItem('autoprime_bookings',JSON.stringify(allData));
+
+  // Update localStorage
+  var localData=JSON.parse(localStorage.getItem('autoprime_bookings')||'[]');
+  var localIdx=localData.findIndex(function(d){return d.id===allData[currentIdx].id;});
+  if(localIdx>=0){ localData[localIdx].status=currentStatus; localStorage.setItem('autoprime_bookings',JSON.stringify(localData)); }
+
+  // Update Google Sheets jika terhubung
+  if(activeTab==='sheets' && SCRIPT_URL){
+    fetch(SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'updateStatus', id:allData[currentIdx].id, status:currentStatus})
+    }).catch(function(){});
+  }
+
   closeModal();
   updateStats();
   renderTable();
-  showToast('✅ Status berhasil diperbarui!');
+  showToast('✅ Status berhasil diperbarui ke "'+currentStatus+'"');
 }
 
 function hapusBooking(){
-  if(currentIdx===null)return;
-  if(!confirm('Hapus booking #'+allData[currentIdx].id+'? Tindakan ini tidak bisa dibatalkan.'))return;
+  if(currentIdx===null) return;
+  var namaData=allData[currentIdx].id;
+  if(!confirm('Hapus booking #'+namaData+'? Tindakan ini tidak bisa dibatalkan.')) return;
+
+  // Hapus dari localStorage
+  var localData=JSON.parse(localStorage.getItem('autoprime_bookings')||'[]');
+  localData=localData.filter(function(d){return d.id!==namaData;});
+  localStorage.setItem('autoprime_bookings',JSON.stringify(localData));
+
+  // Hapus dari Sheets jika terhubung
+  if(activeTab==='sheets' && SCRIPT_URL){
+    fetch(SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'delete', id:namaData})
+    }).catch(function(){});
+  }
+
   allData.splice(currentIdx,1);
-  localStorage.setItem('autoprime_bookings',JSON.stringify(allData));
-  closeModal();
-  updateStats();
-  renderTable();
+  closeModal(); updateStats(); renderTable();
   showToast('🗑 Booking berhasil dihapus.');
 }
 
 function closeModal(e){
-  if(e&&e.target!==document.getElementById('overlay'))return;
+  if(e && e.target!==document.getElementById('overlay')) return;
   document.getElementById('overlay').classList.remove('show');
 }
 
-function showToast(msg){
-  var t=document.getElementById('toast');
-  document.getElementById('toast-msg').textContent=msg;
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},3000);
-}
-
+// ─── EXPORT CSV ───────────────────────────────────────
 function exportCSV(){
-  if(allData.length===0){alert('Tidak ada data untuk diekspor.');return;}
+  if(allData.length===0){showToast('⚠️ Tidak ada data untuk diekspor.');return;}
   var headers=['No. Booking','Waktu','Nama','Telepon','Email','Merek','Model','Tahun','No. Polisi','Warna','KM','Jenis Servis','Keluhan','Tanggal','Jam','Lokasi','Catatan','Pembayaran','Status'];
   var rows=allData.map(function(d){
-    return [d.id,d.waktu,d.nama,d.telp,d.email,d.merek,d.model,d.tahun,d.nopol,d.warna,d.km,d.servis,'"'+d.keluhan.replace(/"/g,'""')+'"',d.tgl,d.jam,d.lokasi,'"'+d.catatan.replace(/"/g,'""')+'"',d.pembayaran,d.status].join(',');
+    return [d.id,d.waktu,d.nama,d.telp,d.email,d.merek,d.model,d.tahun,d.nopol,d.warna,d.km,d.servis,
+      '"'+(d.keluhan||'').replace(/"/g,'""')+'"',d.tgl,d.jam,d.lokasi,
+      '"'+(d.catatan||'').replace(/"/g,'""')+'"',d.pembayaran,d.status].join(',');
   });
   var csv=[headers.join(',')].concat(rows).join('\n');
-  var blob=new Blob([csv],{type:'text/csv'});
+  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  a.href=url;a.download='autoprime-booking-'+Date.now()+'.csv';a.click();
+  a.href=url; a.download='autoprime-booking-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
   URL.revokeObjectURL(url);
   showToast('⬇ File CSV berhasil diunduh!');
 }
 
-loadData();
+// ─── TOAST ────────────────────────────────────────────
+function showToast(msg){
+  var t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3500);
+}
+// ─── LOGIN ────────────────────────────────────────────
+// !! GANTI USERNAME DAN PASSWORD DI SINI !!
+var ADMIN_USER = 'admin';
+var ADMIN_PASS = 'autoprime2024';
+
+var loginAttempts = 0;
+var maxAttempts = 5;
+var lockUntil = 0;
+var countdownInterval = null;
+
+window.onload = function(){
+  // Cek session login
+  var sess = sessionStorage.getItem('autoprime_admin_login');
+  if(sess === 'true'){
+    tampilkanDashboard();
+  }
+  if(SCRIPT_URL) tampilkanConnected();
+  else tampilkanSetup();
+};
+
+function doLogin(){
+  var sekarang = Date.now();
+  if(sekarang < lockUntil){
+    return; // masih terkunci
+  }
+
+  var user = document.getElementById('login-user').value.trim();
+  var pass = document.getElementById('login-pass').value;
+
+  if(user === ADMIN_USER && pass === ADMIN_PASS){
+    // Login berhasil
+    sessionStorage.setItem('autoprime_admin_login','true');
+    loginAttempts = 0;
+    document.getElementById('login-error').classList.remove('show');
+    document.getElementById('login-attempts').classList.remove('show');
+    tampilkanDashboard();
+    loadData();
+  } else {
+    // Login gagal
+    loginAttempts++;
+    var sisa = maxAttempts - loginAttempts;
+    document.getElementById('login-error').classList.add('show');
+
+    if(loginAttempts >= maxAttempts){
+      // Kunci selama 30 detik
+      lockUntil = Date.now() + 30000;
+      document.getElementById('login-locked').classList.add('show');
+      document.getElementById('login-attempts').classList.remove('show');
+      document.getElementById('login-error').classList.remove('show');
+      var sisa_detik = 30;
+      document.getElementById('countdown').textContent = sisa_detik;
+      clearInterval(countdownInterval);
+      countdownInterval = setInterval(function(){
+        sisa_detik--;
+        document.getElementById('countdown').textContent = sisa_detik;
+        if(sisa_detik <= 0){
+          clearInterval(countdownInterval);
+          loginAttempts = 0;
+          document.getElementById('login-locked').classList.remove('show');
+          document.getElementById('login-attempts').classList.remove('show');
+        }
+      }, 1000);
+    } else {
+      var attEl = document.getElementById('login-attempts');
+      attEl.textContent = '⚠️ Sisa percobaan: ' + sisa + ' kali';
+      attEl.classList.add('show');
+    }
+  }
+}
+
+function tampilkanDashboard(){
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('dashboard-page').style.display = 'block';
+}
+
+function togglePw(){
+  var inp = document.getElementById('login-pass');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function logout(){
+  sessionStorage.removeItem('autoprime_admin_login');
+  location.reload();
+}
+
 </script>
+</div><!-- end dashboard-page -->
 </body>
 </html>
