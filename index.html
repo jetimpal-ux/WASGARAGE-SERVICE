@@ -314,7 +314,7 @@ function submitBooking(){
   tampilkanSukses(data);
 
   // Kirim data ke Google Sheets via Apps Script
-  if(APPS_SCRIPT_URL !== 'PASTE_URL_APPS_SCRIPT_ANDA_DI_SINI'){
+  if(APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyOUf5Fos_bjwFDFuDj9cOfhDVAlw1kdO3tttrBQJu-NO-nSb1O-OCPUqCzOR4iyOe7dQ/exec'){
     fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
