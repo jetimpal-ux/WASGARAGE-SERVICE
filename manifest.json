@@ -1,0 +1,42 @@
+{
+  "name": "WAS Garage - Booking Servis",
+  "short_name": "WAS Garage",
+  "description": "Aplikasi booking servis dan sparepart mobil WAS Garage",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#f97316",
+  "orientation": "portrait",
+  "lang": "id",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["automotive", "business"],
+  "shortcuts": [
+    {
+      "name": "Booking Servis",
+      "short_name": "Booking",
+      "description": "Buat booking servis baru",
+      "url": "/index.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
